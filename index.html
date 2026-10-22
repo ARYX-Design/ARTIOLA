@@ -166,6 +166,26 @@
   .ig-strip{margin-top:2.4rem;display:flex;justify-content:space-between;align-items:center;gap:1.4rem;flex-wrap:wrap;padding:1.6rem 1.8rem;border-radius:var(--r);border:1px dashed rgba(23,18,26,.3)}
   .ig-strip p{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2rem);line-height:1.15}
 
+  /* PROFILE */
+  .profile{border:1px solid var(--line);border-radius:32px;padding:clamp(1.4rem,4vw,3rem);background:#fbf8f4}
+  .pf-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(1.4rem,4vw,3.4rem);align-items:center}
+  .avatar{display:block;width:clamp(130px,18vw,210px);aspect-ratio:1}
+  .ring{display:block;width:100%;height:100%;border-radius:50%;padding:5px;background:conic-gradient(from 200deg,#b5122b,#ff6b81,#f1d9d2,#b9a3d8,#b5122b);transition:transform .5s var(--ease)}
+  .avatar:hover .ring{transform:rotate(-8deg) scale(1.03)}
+  .pic{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;border:5px solid #fbf8f4;background:linear-gradient(150deg,var(--blush),var(--paper-2));position:relative;overflow:hidden}
+  .mono{font-family:var(--serif);font-size:clamp(4rem,8vw,6rem);line-height:1;color:var(--cherry);font-style:italic}
+  .pf-id h2{font-size:clamp(2.6rem,6vw,4.6rem);margin-top:.6rem;display:flex;align-items:center;gap:.6rem}
+  .tick{font-size:.4em;color:var(--cherry)}
+  .handle{display:inline-block;margin-top:.4rem;font-weight:600;color:var(--muted)}
+  .pf-id p{margin-top:.9rem;max-width:34rem;color:var(--muted)}
+  .pf-cta{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.4rem}
+  .pf-cta .btn{padding:.8rem 1.4rem}
+  .pf-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:clamp(1.6rem,4vw,2.6rem);border-top:1px solid var(--line);padding-top:clamp(1.4rem,3vw,2rem)}
+  .pf-grid a{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:var(--paper-2)}
+  .pf-grid a .set{width:84%}
+  .pf-grid a::after{content:"↗";position:absolute;inset:0;display:grid;place-items:center;background:rgba(23,18,26,.45);color:#fff;font-size:1.4rem;opacity:0;transition:opacity .3s}
+  .pf-grid a:hover::after{opacity:1}
+
   /* PROMISES */
   .promises{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
   .pr{padding:2rem 1.6rem 1rem 0;border-right:1px solid var(--line)}
@@ -226,6 +246,7 @@
     .svc p{grid-column:2}
     .svc .sw{grid-column:2;justify-content:flex-start;margin-top:.4rem}
     .coll{grid-template-columns:1fr 1fr}
+    .pf-grid{grid-template-columns:repeat(3,1fr)}
     .promises{grid-template-columns:1fr 1fr}
     .pr{padding:1.8rem 1rem 1.4rem 0!important;border-right:0;border-bottom:1px solid var(--line)}
     .pr:nth-child(even){padding-left:1rem!important;border-left:1px solid var(--line)}
@@ -234,6 +255,7 @@
   }
   @media (max-width:620px){
     .coll{grid-template-columns:1fr}
+    .pf-head{grid-template-columns:1fr;justify-items:start}
     .promises{grid-template-columns:1fr}
     .pr:nth-child(even){padding-left:0!important;border-left:0}
     .row2{grid-template-columns:1fr}
@@ -260,6 +282,7 @@
       <a href="#services">Services</a>
       <a href="#design">Design your set</a>
       <a href="#collection">Collection</a>
+      <a href="#artist">The artist</a>
       <a href="#faq">FAQ</a>
     </nav>
     <a href="#book" class="btn btn-ink">Book a set <span class="arrow">→</span></a>
@@ -272,6 +295,7 @@
   <a href="#services">Services</a>
   <a href="#design">Design your set</a>
   <a href="#collection">Collection</a>
+  <a href="#artist">The artist</a>
   <a href="#faq">FAQ</a>
   <a href="#book"><em>Book a set →</em></a>
 </div>
@@ -402,6 +426,30 @@
   </div>
 </section>
 
+<!-- PROFILE -->
+<section id="artist" style="padding-top:0">
+  <div class="wrap">
+    <div class="profile rv">
+      <div class="pf-head">
+        <a class="avatar" href="https://www.instagram.com/artt_nailsss" target="_blank" rel="noopener" aria-label="Artiola on Instagram">
+          <span class="ring"><span class="pic"><span class="mono">A</span><img class="photo" id="profilePhoto" alt="Artiola, nail artist"></span></span>
+        </a>
+        <div class="pf-id">
+          <span class="eyebrow" style="color:var(--cherry)">Meet the artist</span>
+          <h2>Artiola<span class="tick" aria-hidden="true">✦</span></h2>
+          <a class="handle" href="https://www.instagram.com/artt_nailsss" target="_blank" rel="noopener">@artt_nailsss</a>
+          <p>Nail artist &amp; the hands behind every set. Gel, BIAB, extensions and hand-painted art — designed around you, one nail at a time.</p>
+          <div class="pf-cta">
+            <a class="btn btn-ink" href="https://www.instagram.com/artt_nailsss" target="_blank" rel="noopener">Follow <span class="arrow">↗</span></a>
+            <a class="btn btn-line js-dm" href="https://ig.me/m/artt_nailsss" target="_blank" rel="noopener">Message</a>
+          </div>
+        </div>
+      </div>
+      <div class="pf-grid" id="pfGrid"></div>
+    </div>
+  </div>
+</section>
+
 <!-- PROMISES -->
 <section style="padding-top:0">
   <div class="wrap">
@@ -507,16 +555,20 @@
     instagram: "artt_nailsss",
   };
 
-  /* ---- Photos: swap these for real @artt_nailsss photos (e.g. images/cherry.jpg) ---- */
-  const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_3DS5tytbaApTUP0o82LS6nBJmMM/";
+  /* ---- Photos ----
+     Drop real @artt_nailsss photos into the images/ folder with these names
+     (see images/README.md). Each slot tries its sources in order; if none
+     loads, the drawn nail set stays in place. */
+  const GENERATED = "https://d8j0ntlcm91z4.cloudfront.net/user_3DS5tytbaApTUP0o82LS6nBJmMM/hf_20261022_191840_d77967da-f965-4200-888a-b56a631bc2e8";
   const PHOTOS = {
-    hero:             CDN + "hf_20261022_191840_d77967da-f965-4200-888a-b56a631bc2e8.png",
-    "Cherry Glaze":   CDN + "hf_20261022_191840_d77967da-f965-4200-888a-b56a631bc2e8_min.webp",
-    "Milky French":   "",
-    "Lilac Chrome":   "",
-    "Mocha Matte":    "",
-    "Love Notes":     "",
-    "Midnight Swirl": "",
+    hero:             ["images/hero.jpg", GENERATED + ".png"],
+    profile:          ["images/profile.jpg"],
+    "Cherry Glaze":   ["images/look-1.jpg", GENERATED + "_min.webp"],
+    "Milky French":   ["images/look-2.jpg"],
+    "Lilac Chrome":   ["images/look-3.jpg"],
+    "Mocha Matte":    ["images/look-4.jpg"],
+    "Love Notes":     ["images/look-5.jpg"],
+    "Midnight Swirl": ["images/look-6.jpg"],
   };
 
   /* ---- Nail renderer ---- */
@@ -592,15 +644,18 @@
   let heroTimer = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : setInterval(showHero, 3200);
 
   /* Photos fade in over the drawn nails; if one fails to load, the drawing stays. */
-  function loadPhoto(img, src, onOk){
-    if (!src) return;
-    img.onload = () => { img.classList.add("ok"); onOk && onOk(); };
-    img.onerror = () => img.remove();
-    img.src = src;
+  function loadPhoto(img, srcs, onOk){
+    const list = [].concat(srcs || []).filter(Boolean);
+    let i = 0;
+    const next = () => { if (i < list.length) img.src = list[i++]; else img.remove(); };
+    img.onload = () => { img.classList.add("ok"); onOk && onOk(img.getAttribute("src")); };
+    img.onerror = next;
+    next();
   }
-  loadPhoto(document.getElementById("heroPhoto"), PHOTOS.hero, () => {
+  loadPhoto(document.getElementById("heroPhoto"), PHOTOS.hero, src => {
     clearInterval(heroTimer);
-    document.getElementById("heroLabel").textContent = "Cherry Glaze · Almond";
+    const real = src.startsWith("images/");
+    document.getElementById("heroLabel").textContent = real ? "Fresh from @artt_nailsss" : "Cherry Glaze · Almond";
     document.getElementById("heroDot").style.background = COLORS.Cherry;
   });
 
@@ -650,6 +705,13 @@
     w.querySelector(".canvas").style.background = `radial-gradient(70% 70% at 50% 30%, #fff, ${shade(COLORS[looks[i].d.color], 150)}22 60%), var(--paper-2)`;
     loadPhoto(w.querySelector(".photo"), PHOTOS[looks[i].t]);
   });
+  loadPhoto($("profilePhoto"), PHOTOS.profile, () => document.querySelector(".mono").remove());
+  $("pfGrid").innerHTML = looks.map(l => `<a href="https://www.instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener" aria-label="${l.t} on Instagram"><div class="set"></div><img class="photo" alt="${l.t} nails" loading="lazy"></a>`).join("");
+  $("pfGrid").querySelectorAll("a").forEach((a,i) => {
+    renderSet(a.querySelector(".set"), looks[i].d);
+    loadPhoto(a.querySelector(".photo"), PHOTOS[looks[i].t]);
+  });
+
   $("coll").addEventListener("click", e => {
     const b = e.target.closest("button[data-i]"); if (!b) return;
     Object.assign(state, looks[b.dataset.i].d); updateBuilder();
