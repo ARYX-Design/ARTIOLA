@@ -231,6 +231,11 @@
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
   .design-pill{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border-radius:14px;background:var(--paper-2);font-size:.88rem}
   .design-pill i{width:14px;height:20px;border-radius:50% 50% 45% 45% / 70% 70% 30% 30%;flex:none}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .sent{display:grid;gap:1rem;text-align:center;justify-items:center;padding:1.4rem .4rem}
+  .sent .tick{width:64px;height:64px;border-radius:50%;background:var(--blush);display:grid;place-items:center;color:var(--cherry);font-size:1.8rem}
+  .sent h3{font-family:var(--serif);font-weight:400;font-size:2.2rem;line-height:1}
+  .sent p{color:var(--muted);max-width:26rem}
   .form-note{font-size:.8rem;color:var(--muted);text-align:center}
 
   footer{padding:70px 0 40px}
@@ -512,6 +517,8 @@
           <label>Name<input name="name" autocomplete="name" placeholder="Your name"></label>
           <label>Phone<input name="phone" type="tel" autocomplete="tel" placeholder="Your number"></label>
         </div>
+        <label>Instagram <span style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</span><input name="instagram" placeholder="@yourhandle" autocapitalize="off"></label>
+        <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
         <label>Service
           <select name="service">
             <option value="">Choose a service</option>
@@ -532,7 +539,7 @@
         </div>
         <label>Notes &amp; inspo<textarea name="notes" placeholder="Length, ideas, anything we should know"></textarea></label>
         <button class="btn btn-ink" type="submit">Send request <span class="arrow">→</span></button>
-        <p class="form-note" id="note">We'll open Instagram DMs with your request copied.</p>
+        <p class="form-note" id="note">We'll confirm your appointment by phone or Instagram.</p>
       </form>
     </div>
   </div>
@@ -549,6 +556,7 @@
         <a href="#design">Design</a>
         <a href="#faq">FAQ</a>
         <a href="https://www.instagram.com/artt_nailsss" target="_blank" rel="noopener">Instagram ↗</a>
+        <a href="/admin" rel="nofollow">Studio login</a>
       </div>
     </div>
     <div class="copy"><span>© <span id="yr"></span> Artiola Nail Art Studio</span><span>Your nails, our canvas.</span></div>
@@ -737,15 +745,34 @@
   });
   if (CONFIG.whatsapp) $("note").textContent = "We'll open WhatsApp with your request ready to send.";
 
-  $("form").addEventListener("submit", e => {
+  $("form").addEventListener("submit", async e => {
     e.preventDefault();
-    const f = new FormData(e.target);
+    const form = e.target, f = new FormData(form), btn = form.querySelector("button[type=submit]");
     if (!f.get("name") || !f.get("service")){ $("note").textContent = "Please add your name and choose a service 💅"; return; }
-    const msg = `Hi Artiola! 💅\nName: ${f.get("name")}\nPhone: ${f.get("phone")||"-"}\nService: ${f.get("service")}\nDesign: ${label(state)}\nDate: ${f.get("date")||"Flexible"} (${f.get("time")})\nNotes: ${f.get("notes")||"-"}`;
+    if (!f.get("phone") && !f.get("instagram")){ $("note").textContent = "Add a phone number or Instagram so we can confirm 💕"; return; }
+    const data = Object.fromEntries(f); data.design = label(state);
+    const msg = `Hi Artiola! 💅\nName: ${data.name}\nPhone: ${data.phone||"-"}\nService: ${data.service}\nDesign: ${data.design}\nDate: ${data.date||"Flexible"} (${data.time})\nNotes: ${data.notes||"-"}`;
+    btn.disabled = true; $("note").textContent = "Sending…";
+    let saved = false;
+    try {
+      const r = await fetch("/api/bookings", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(data)});
+      const out = await r.json().catch(() => ({}));
+      if (r.status === 400) { $("note").textContent = out.error || "Please check the form."; btn.disabled = false; return; }
+      saved = r.ok;
+    } catch { /* offline or no backend: fall back to messaging */ }
+    btn.disabled = false;
+    if (saved) {
+      const when = data.date ? new Date(data.date + "T12:00").toLocaleDateString(undefined, {weekday:"long", day:"numeric", month:"long"}) : "your preferred day";
+      form.innerHTML = `<div class="sent"><span class="tick">✓</span><h3>Request <em>sent</em>!</h3>
+        <p>Thank you, ${data.name.replace(/[<>&"]/g, "")}. We'll confirm ${data.service.toLowerCase()} on ${when} (${data.time.toLowerCase()}) as soon as possible.</p>
+        <a class="btn btn-line" href="${chatLink(msg)}" target="_blank" rel="noopener">Message us too <span class="arrow">↗</span></a></div>`;
+      return;
+    }
     if (!CONFIG.whatsapp && navigator.clipboard) navigator.clipboard.writeText(msg).catch(()=>{});
     window.open(chatLink(msg), "_blank", "noopener");
     $("note").textContent = CONFIG.whatsapp ? "Opening WhatsApp — just hit send!" : "Request copied — paste it into our Instagram DM 💕";
   });
+
 
   /* ---- UI ---- */
   $("yr").textContent = new Date().getFullYear();
