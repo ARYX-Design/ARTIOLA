@@ -153,7 +153,10 @@
   .coll{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
   .work{border-radius:var(--r);overflow:hidden;background:var(--paper-2);position:relative;display:flex;flex-direction:column;transition:transform .5s var(--ease)}
   .work:hover{transform:translateY(-6px)}
-  .work .canvas{aspect-ratio:4/3;display:grid;place-items:center;padding:1.4rem}
+  .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s var(--ease),transform 1.2s var(--ease)}
+  .photo.ok{opacity:1}
+  .work:hover .photo{transform:scale(1.04)}
+  .work .canvas{aspect-ratio:4/3;display:grid;place-items:center;padding:1.4rem;position:relative;overflow:hidden}
   .work .canvas .set{width:88%}
   .work .meta{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.2rem;border-top:1px solid var(--line);background:var(--paper)}
   .work .meta b{font-family:var(--serif);font-weight:400;font-size:1.5rem;display:block;line-height:1.1}
@@ -299,6 +302,7 @@
       </div>
       <div class="hero-stage">
         <div class="set" id="heroSet"></div>
+        <img class="photo" id="heroPhoto" alt="Hand with glossy cherry red almond gel nails" fetchpriority="high">
         <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
           <defs><path id="c" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
           <circle cx="60" cy="60" r="58" fill="#17121a"/>
@@ -503,6 +507,18 @@
     instagram: "artt_nailsss",
   };
 
+  /* ---- Photos: swap these for real @artt_nailsss photos (e.g. images/cherry.jpg) ---- */
+  const CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_3DS5tytbaApTUP0o82LS6nBJmMM/";
+  const PHOTOS = {
+    hero:             CDN + "hf_20261022_191840_d77967da-f965-4200-888a-b56a631bc2e8.png",
+    "Cherry Glaze":   CDN + "hf_20261022_191840_d77967da-f965-4200-888a-b56a631bc2e8.png",
+    "Milky French":   "",
+    "Lilac Chrome":   "",
+    "Mocha Matte":    "",
+    "Love Notes":     "",
+    "Midnight Swirl": "",
+  };
+
   /* ---- Nail renderer ---- */
   const SHAPES = {
     Almond:   "M6 104 Q30 113 54 104 L54 52 C54 28 38 10 30 4 C22 10 6 28 6 52 Z",
@@ -573,7 +589,20 @@
     hi = (hi+1) % heroLooks.length;
   }
   showHero();
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(showHero, 3200);
+  let heroTimer = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : setInterval(showHero, 3200);
+
+  /* Photos fade in over the drawn nails; if one fails to load, the drawing stays. */
+  function loadPhoto(img, src, onOk){
+    if (!src) return;
+    img.onload = () => { img.classList.add("ok"); onOk && onOk(); };
+    img.onerror = () => img.remove();
+    img.src = src;
+  }
+  loadPhoto(document.getElementById("heroPhoto"), PHOTOS.hero, () => {
+    clearInterval(heroTimer);
+    document.getElementById("heroLabel").textContent = "Cherry Glaze · Almond";
+    document.getElementById("heroDot").style.background = COLORS.Cherry;
+  });
 
   /* ---- Builder ---- */
   const state = {shape:"Almond",color:"Cherry",finish:"Glossy",accent:"None"};
@@ -613,12 +642,13 @@
   ];
   $("coll").innerHTML = looks.map((l,i)=>`
     <article class="work rv ${["","d1","d2"][i%3]}">
-      <div class="canvas"><div class="set"></div></div>
+      <div class="canvas"><div class="set"></div><img class="photo" alt="${l.t} nails" loading="lazy"></div>
       <div class="meta"><div><b>${l.t}</b><small>${l.s}</small></div><button type="button" data-i="${i}">Try it →</button></div>
     </article>`).join("");
   document.querySelectorAll("#coll .work").forEach((w,i)=>{
     renderSet(w.querySelector(".set"), looks[i].d);
     w.querySelector(".canvas").style.background = `radial-gradient(70% 70% at 50% 30%, #fff, ${shade(COLORS[looks[i].d.color], 150)}22 60%), var(--paper-2)`;
+    loadPhoto(w.querySelector(".photo"), PHOTOS[looks[i].t]);
   });
   $("coll").addEventListener("click", e => {
     const b = e.target.closest("button[data-i]"); if (!b) return;
