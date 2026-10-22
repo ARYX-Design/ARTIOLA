@@ -8,7 +8,14 @@
 <meta property="og:title" content="Artiola — Nail Art Studio">
 <meta property="og:description" content="Your nails, our canvas. Custom nail art, gel, BIAB and extensions.">
 <meta name="theme-color" content="#17121a">
+<meta property="og:type" content="website">
+<meta property="og:image" content="images/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"NailSalon","name":"Artiola","description":"Nail art studio — custom nail art, gel, BIAB and extensions.","image":"images/hero.jpg","sameAs":["https://www.instagram.com/artt_nailsss"],"priceRange":"$$"}
+</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%2317121a'/><path d='M20 52 Q32 57 44 52 L44 30 C44 18 36 10 32 7 C28 10 20 18 20 30 Z' fill='%23b5122b'/><path d='M27 16 C26 22 25 30 25 40' stroke='%23fff' stroke-opacity='.6' stroke-width='3' fill='none' stroke-linecap='round'/></svg>">
+<link rel="preload" as="image" href="images/hero.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
@@ -155,6 +162,7 @@
   .work:hover{transform:translateY(-6px)}
   .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s var(--ease),transform 1.2s var(--ease)}
   .photo.ok{opacity:1}
+  #heroPhoto{object-position:55% 85%}
   .work:hover .photo{transform:scale(1.04)}
   .work .canvas{aspect-ratio:4/3;display:grid;place-items:center;padding:1.4rem;position:relative;overflow:hidden}
   .work .canvas .set{width:88%}
@@ -416,7 +424,7 @@
         <span class="eyebrow" style="color:var(--cherry)">The collection</span>
         <h2>Studio <em>favourites</em>.</h2>
       </div>
-      <p>Signature looks to get you started. Tap “Try it” to load one into the designer and make it yours.</p>
+      <p>Signature looks to get you started. Tap “Try it” to load one into the designer and make it yours. <small style="display:block;margin-top:.6rem;font-size:.78rem">Photos are styled inspiration shots — see real client sets on Instagram.</small></p>
     </div>
     <div class="coll" id="coll"></div>
     <div class="ig-strip rv">
@@ -559,16 +567,16 @@
      Drop real @artt_nailsss photos into the images/ folder with these names
      (see images/README.md). Each slot tries its sources in order; if none
      loads, the drawn nail set stays in place. */
-  const GENERATED = "https://d8j0ntlcm91z4.cloudfront.net/user_3DS5tytbaApTUP0o82LS6nBJmMM/hf_20261022_191840_d77967da-f965-4200-888a-b56a631bc2e8";
+  const pic = name => ["images/" + name + ".webp", "images/" + name + ".jpg"];
   const PHOTOS = {
-    hero:             ["images/hero.jpg", GENERATED + ".png"],
-    profile:          ["images/profile.jpg"],
-    "Cherry Glaze":   ["images/look-1.jpg", GENERATED + "_min.webp"],
-    "Milky French":   ["images/look-2.jpg"],
-    "Lilac Chrome":   ["images/look-3.jpg"],
-    "Mocha Matte":    ["images/look-4.jpg"],
-    "Love Notes":     ["images/look-5.jpg"],
-    "Midnight Swirl": ["images/look-6.jpg"],
+    hero:             pic("hero"),
+    profile:          pic("profile"),
+    "Cherry Glaze":   pic("look-1"),
+    "Milk Bath":      pic("look-2"),
+    "Lilac Chrome":   pic("look-3"),
+    "Mocha Matte":    pic("look-4"),
+    "Love Notes":     pic("look-5"),
+    "Midnight Swirl": pic("look-6"),
   };
 
   /* ---- Nail renderer ---- */
@@ -652,10 +660,9 @@
     img.onerror = next;
     next();
   }
-  loadPhoto(document.getElementById("heroPhoto"), PHOTOS.hero, src => {
+  loadPhoto(document.getElementById("heroPhoto"), PHOTOS.hero, () => {
     clearInterval(heroTimer);
-    const real = src.startsWith("images/");
-    document.getElementById("heroLabel").textContent = real ? "Fresh from @artt_nailsss" : "Cherry Glaze · Almond";
+    document.getElementById("heroLabel").textContent = "Cherry Glaze · Almond";
     document.getElementById("heroDot").style.background = COLORS.Cherry;
   });
 
@@ -689,7 +696,7 @@
   /* ---- Collection ---- */
   const looks = [
     {t:"Cherry Glaze",s:"Classic, glossy, iconic",d:{shape:"Almond",color:"Cherry",finish:"Glossy",accent:"None"}},
-    {t:"Milky French",s:"Soft & clean everyday",d:{shape:"Oval",color:"Milky",finish:"French",accent:"None"}},
+    {t:"Milk Bath",s:"Soft, sheer & clean",d:{shape:"Oval",color:"Milky",finish:"Glossy",accent:"None"}},
     {t:"Lilac Chrome",s:"Pearly, high-shine",d:{shape:"Coffin",color:"Lilac",finish:"Chrome",accent:"None"}},
     {t:"Mocha Matte",s:"Velvety autumn tones",d:{shape:"Square",color:"Mocha",finish:"Matte",accent:"Gold flake"}},
     {t:"Love Notes",s:"Sweet hand-painted hearts",d:{shape:"Almond",color:"Blush",finish:"Glossy",accent:"Hearts"}},
